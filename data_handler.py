@@ -29,7 +29,7 @@ def get_all_user_story():
             """,
             "criteria": """
                 When I open the website (`/`),
-                And I click the "Add User Story" button
+                And I click the "Add User Story" link
                 Then ensure I see form where I can add details of the new User Story,
                 And if I submit the form, this US gets saved.
             """,
