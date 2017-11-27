@@ -19,7 +19,10 @@ def route_story_add():
         data_handler.add_user_story(request.form.to_dict())  # Cast received Form data to normal Python dictionary
         return redirect('/')
 
-    return render_template('user_story.html', user_story={})
+    return render_template('user_story.html', user_story={
+        'business_value': 500,
+        'estimation': 2,
+    })
 
 
 @app.route('/story/<story_id>', methods=['GET', 'POST'])
@@ -27,9 +30,9 @@ def route_story_update(story_id: int):
     if request.method == 'POST':
         pass
     else:
-        user_story = {}  # data_handler.get_user_story(story_id)
+        user_story = data_handler.get_user_story(story_id)
 
-        return render_template('user_story.html', user_story=user_story)
+        return render_template('user_story.html', user_story=user_story, statuses=data_handler.STATUSES)
 
 
 if __name__ == '__main__':
