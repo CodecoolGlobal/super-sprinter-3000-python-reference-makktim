@@ -7,18 +7,20 @@
 {% block content %}
     <h1>Add User Story</h1>
 
-    <form action="{{ url_for('route_story_add') }}" method="post">
+    <form action="{{ form_url }}"
+          method="post">
+        <input type="hidden" name="id" value="{{ user_story['id'] }}">
         <p>
             <label for="title">Story Title:</label><br>
             <input type="text" name="title" id="title" required minlength="5" value="{{ user_story['title'] }}">
         </p>
         <p>
             <label for="user_story">User Story:</label><br>
-            <textarea name="user_story" id="user_story" cols="40" rows="4" required>{{ user_story['user_story'] }}</textarea>
+            <textarea name="user_story" id="user_story" cols="40" rows="4" required>{{ user_story['user_story']|safe }}</textarea>
         </p>
         <p>
             <label for="acceptance_criteria">Acceptance Criteria:</label><br>
-            <textarea name="acceptance_criteria" id="acceptance_criteria" cols="40" rows="6" required>{{ user_story['acceptance_criteria'] }}</textarea>
+            <textarea name="acceptance_criteria" id="acceptance_criteria" cols="40" rows="6" required>{{ user_story['acceptance_criteria']|safe }}</textarea>
         </p>
         <p>
             <label for="business_value">Business value:</label><br>
@@ -38,13 +40,19 @@
                 <select name="status" id="status">
                     {% for status in statuses %}
                         <option {% if user_story['status'] == status %}selected{% endif %}
-                                value="status">{{ status }}</option>
+                                value="{{ status }}">{{ status }}</option>
                     {% endfor %}
                 </select>
             </p>
         {% endif %}
         <p>
-            <button type="submit">Add new User Story</button>
+            <button type="submit">
+                {% if user_story['status'] is defined %}
+                    Update User Story
+                {% else %}
+                    Add new User Story
+                {% endif %}
+            </button>
         </p>
     </form>
 {% endblock %}

@@ -10,7 +10,13 @@ def get_all_user_story():
 
 
 def get_user_story(story_id):
-    return get_csv_data(story_id)
+    user_story = get_csv_data(story_id)
+
+    # change input new line to the correct HTML code to display it in the edit textarea
+    user_story['user_story'] = user_story['user_story'].replace('<br>', '&#10;')
+    user_story['acceptance_criteria'] = user_story['acceptance_criteria'].replace('<br>', '&#10;')
+
+    return user_story
 
 
 def get_csv_data(one_user_story_id=None):
@@ -51,20 +57,39 @@ def get_csv_data(one_user_story_id=None):
 def add_user_story(story):
     existing_data = get_all_user_story()
 
+    # set default status
+    story['status'] = STATUSES[0]
+
+    if len(existing_data) > 0:
+        story['id'] = int(existing_data[-1]['id']) + 1
+    else:
+        story['id'] = 0
+
+    add_user_story_to_file(existing_data, story, True)
+
+
+def update_user_story(story):
+    existing_data = get_all_user_story()
+
+    add_user_story_to_file(existing_data, story, False)
+
+
+def add_user_story_to_file(existing_data, story, append=True):
+    # change input new line to the correct HTML tag
+    story['user_story'] = story['user_story'].replace('\r\n', '<br>')
+    story['acceptance_criteria'] = story['acceptance_criteria'].replace('\r\n', '<br>')
+
     with open(DATA_FILE_PATH, 'w', newline='', encoding='utf-8') as csvfile:
         writer = csv.DictWriter(csvfile, fieldnames=DATA_HEADER)
-
-        if len(existing_data) > 0:
-            story['id'] = int(existing_data[-1]['id']) + 1
-        else:
-            story['id'] = 0
-
-        story['status'] = STATUSES[0]
-        story['user_story'] = story['user_story'].replace('\r\n', '<br>')
-        story['acceptance_criteria'] = story['acceptance_criteria'].replace('\r\n', '<br>')
-
         writer.writeheader()
+
         for row in existing_data:
+            # On updating an existing User Story, just overwrite the current line with the received data
+            if not append:
+                if row['id'] == story['id']:
+                    row = story
+
             writer.writerow(row)
 
-        writer.writerow(story)
+        if append:
+            writer.writerow(story)
