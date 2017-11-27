@@ -8,7 +8,7 @@
     <h1>Super Sprinter 3000</h1>
 
     <br>
-    <a href="/story">Add new User Story</a>
+    <a href="{{ url_for('route_story_add') }}">Add new User Story</a>
     <br>
 
     <table>
@@ -24,7 +24,7 @@
         {% for user_story in user_stories %}
             <tr>
                 <td>{{ user_story['id'] }}</td>
-                <td>{{ user_story['title'] }}</td>
+                <td><a href="{{ url_for('route_story_update', story_id=user_story['id']) }}">{{ user_story['title'] }}</a></td>
                 <td>{{ user_story['user_story'] | safe }}</td>
                 <td>{{ user_story['acceptance_criteria'] | safe }}</td>
                 <td>{{ user_story['business_value'] }} point</td>
