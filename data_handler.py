@@ -30,4 +30,22 @@ def get_all_user_story():
 
 
 def add_user_story(story):
-    print(story)
+    existing_data = get_all_user_story()
+
+    with open(DATA_FILE_PATH, 'w', newline='', encoding='utf-8') as csvfile:
+        writer = csv.DictWriter(csvfile, fieldnames=DATA_HEADER)
+
+        if len(existing_data) > 0:
+            story['id'] = int(existing_data[-1]['id']) + 1
+        else:
+            story['id'] = 0
+
+        story['status'] = 'new'
+        story['user_story'] = story['user_story'].replace('\r\n', '<br>')
+        story['acceptance_criteria'] = story['acceptance_criteria'].replace('\r\n', '<br>')
+
+        writer.writeheader()
+        for row in existing_data:
+            writer.writerow(row)
+
+        writer.writerow(story)
