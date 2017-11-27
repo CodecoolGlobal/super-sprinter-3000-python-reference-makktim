@@ -44,3 +44,7 @@ def get_all_user_story():
         user_story['criteria'] = user_story['criteria'].replace('\n', '<br>')
 
     return user_stories
+
+
+def add_user_story(story):
+    print(story)
