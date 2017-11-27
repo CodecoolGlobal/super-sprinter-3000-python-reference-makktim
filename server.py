@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request, redirect
 
 import data_handler
 
@@ -13,8 +13,12 @@ def route_list():
     return render_template('list.html', user_stories=user_stories)
 
 
-@app.route('/story', methods=['GET'])
+@app.route('/story', methods=['GET', 'POST'])
 def route_story_form():
+    if request.method == 'POST':
+        print(request.form.to_dict())  # Cast received Form data to normal Python dictionary
+        return redirect('/'),
+
     return render_template('add_user_story.html')
 
 
