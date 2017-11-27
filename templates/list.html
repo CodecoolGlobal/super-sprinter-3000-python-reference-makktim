@@ -5,6 +5,27 @@
 {% endblock %}
 
 {% block content %}
-    <h1>Welcome!</h1>
-    <p>Flask works like a <strike>Py</strike><strong>Charm</strong>!</p>
+    <h1>Super Sprinter 3000</h1>
+    <table>
+        <tr>
+            <th>Id</th>
+            <th>Story Title</th>
+            <th>User Story</th>
+            <th>Acceptance Criteria</th>
+            <th>Business value</th>
+            <th>Estimation</th>
+            <th>Status</th>
+        </tr>
+        {% for user_story in user_stories %}
+            <tr>
+                <td>{{ user_story['id'] }}</td>
+                <td>{{ user_story['title'] }}</td>
+                <td>{{ user_story['story'] | safe }}</td>
+                <td>{{ user_story['criteria'] | safe }}</td>
+                <td>{{ user_story['value'] }} point</td>
+                <td>{{ user_story['estimation'] }}h</td>
+                <td>{{ user_story['status'] }}</td>
+            </tr>
+        {% endfor %}
+    </table>
 {% endblock %}
