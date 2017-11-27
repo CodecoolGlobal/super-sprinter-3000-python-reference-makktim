@@ -25,6 +25,8 @@ def route_story_add():
                                'estimation': 2,
                            },
                            form_url=url_for('route_story_add'),
+                           page_title='Add User Story',
+                           button_title='Add new User Story',
                            )
 
 
@@ -38,7 +40,9 @@ def route_story_update(story_id: int):
     return render_template('user_story.html',
                            user_story=user_story,
                            statuses=data_handler.STATUSES,
-                           form_url=url_for('route_story_update', story_id=story_id)
+                           form_url=url_for('route_story_update', story_id=story_id),
+                           page_title='Update User Story',
+                           button_title='Update User Story',
                            )
 
 

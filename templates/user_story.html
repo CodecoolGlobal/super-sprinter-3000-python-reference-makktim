@@ -1,11 +1,11 @@
 {% extends 'layout.html' %}
 
 {% block title %}
-    Add User Story
+    {{ page_title }}
 {% endblock %}
 
 {% block content %}
-    <h1>Add User Story</h1>
+    <h1>{{ page_title }}</h1>
 
     <form action="{{ form_url }}"
           method="post">
@@ -46,13 +46,7 @@
             </p>
         {% endif %}
         <p>
-            <button type="submit">
-                {% if user_story['status'] is defined %}
-                    Update User Story
-                {% else %}
-                    Add new User Story
-                {% endif %}
-            </button>
+            <button type="submit">{{ button_title }}</button>
         </p>
     </form>
 {% endblock %}
