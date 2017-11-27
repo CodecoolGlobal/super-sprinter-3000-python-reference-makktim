@@ -1,0 +1,67 @@
+body{
+    margin: 10px 20px;
+}
+
+h1{
+    text-transform: uppercase;
+    font-family: sans-serif;
+    color: crimson;
+    text-shadow: 1px 2px 9px lightgrey;
+}
+
+table, td, th {
+    border-collapse:separate;
+}
+
+table{
+    width: 100%;
+    border: 1px solid crimson;
+    border-radius: 3px;
+    border-spacing: 0;
+}
+
+tr:nth-of-type(odd){
+    background: hsla(348, 83%, 96%, 1);
+}
+
+th{
+    white-space: nowrap;
+    background: crimson;
+    color: white;
+}
+
+td, th{
+    vertical-align: top;
+    padding: 10px;
+}
+
+td a{
+    color: dodgerblue;
+    text-decoration: none;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+form{
+    max-width: 400px;
+    border: 1px solid crimson;
+    padding: 0 20px;
+    border-radius: 3px;
+}
+
+.button{
+    border: 1px solid crimson;
+    margin-bottom: 10px;
+    display: inline-block;
+    padding: 10px 20px;
+    text-decoration: none;
+    color: crimson;
+    font-weight: bold;
+    font-family: sans-serif;
+    border-radius: 3px;
+}
+
+.button:hover,
+.button:focus{
+    background: hsla(348, 83%, 96%, 1);
+}

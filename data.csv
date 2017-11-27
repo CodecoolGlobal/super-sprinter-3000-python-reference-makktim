@@ -1,15 +1,9 @@
-id,title,story,criteria,value,estimation,status
-1,List all User Stories,"As a User,
-I want to see all the previously saved User stories,
-So I get an overview of all requirements
-","Given that there are any number ({0..n}) of saved User Stories,
-When I open the website (`/`),
-Then ensure I see a table with all the stored data,
-And if there is no stored data,
-Then hide the table",1000,2,new
-2,Add new User Stories,"As a User,
-I want to be able to add a new User stories,
-So I can extend the list of requirements","When I open the website (`/`),
-And I click the ""Add User Story"" link
-Then ensure I see form where I can add details of the new User Story,
-And if I submit the form, this US gets saved.",800,4,new
+id,title,user_story,acceptance_criteria,business_value,estimation,status
+0,List all User Stories,"As a User,<br>I want to see all the previously saved User stories,<br>So I get an overview of all requirements<br>","Given that there are any number ({0..n}) of saved User Stories,<br>When I open the website (`/`),<br>Then ensure I see a table with all the stored data,<br>And if there is no stored data,<br>Then hide the table",1000,2,status
+1,Add new User Stories,"As a User,<br>I want to be able to add a new User stories,<br>So I can extend the list of requirements","...<br>When I open the website (`/`),<br>And I click the ""Add User Story"" link<br>Then ensure I see form where I can add details of the new User Story,<br>And if I submit the form, this US gets saved.<br>...",800,4,status
+2,aaaaa,b<br>b<br>b,c<br>c,500,2,new
+3,mmmmmm,dsa<br>d<br>as<br>ds<br>ad<br>sa<br>ds<br>a<br>ds<br>a<br>,dsa,500,2,planning
+4,rrrrrr,r<br>r<br>rdddd<br>r<br>r<br>r<br>r,g<br>g<br>g<br>g<br>,500,2,status
+5,List all User Stories,"As a User,<br>I want to see all the previously saved User stories,<br>So I get an overview of all requirements<br>","Given that there are any number ({0..n}) of saved User Stories,<br>When I open the website (`/`),<br>Then ensure I see a table with all the stored data,<br>And if there is no stored data,<br>Then hide the table",1000,2,planning
+6,mmmmmm,dsadsadadsadsads,dsa,500,2,planning
+7,testtesttest,test<br>testtest,testtesttest<br>testtest<br>test,1200,0.5,in progress
