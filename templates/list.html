@@ -1,11 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>List User Stories</title>
-</head>
-<body>
-<h1>Welcome!</h1>
-<p>Flask works like a <strike>Py</strike><strong>Charm</strong>!</p>
-</body>
-</html>
+{% extends 'layout.html' %}
+
+{% block title %}
+    Welcome!
+{% endblock %}
+
+{% block content %}
+    <h1>Welcome!</h1>
+    <p>Flask works like a <strike>Py</strike><strong>Charm</strong>!</p>
+{% endblock %}
