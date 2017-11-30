@@ -23,83 +23,69 @@ describe('List all User Stories', () => {
         expect(await response.text()).not.to.contain('Server Error');
     }));
 
-    it('should show a header', test(async () => {
-        const h1Text = await page.evaluate(() => document.querySelector('h1').innerText);
-
-        expect(h1Text).to.be.equal('Super Sprinter 3000');
+    it('should show application title as a header', test(async () => {
+        expect(
+            await page.$eval('h1', el => el.innerText)
+        ).to.be.equal('Super Sprinter 3000');
     }));
 
     it('should contain a table', test(async () => {
-        const table = await page.evaluate(() => document.querySelector('table'));
-
-        expect(table).not.to.be.null;
+        expect(
+            await page.$('table')
+        ).not.to.be.null;
     }));
 
     it('table should contain 4 rows', test(async () => {
-        const columnCount = await page.evaluate(() => document.querySelector('table tr').length);
-
-        expect(columnCount).not.to.be.equal(4);
+        expect(
+            await page.$eval('table tr', el => el.length)
+        ).not.to.be.equal(4);
     }));
 
     it('table should contain the 7 column headers', test(async () => {
-        const columnCount = await page.evaluate(() => document.querySelector('table tr:nth-of-type(1) th').length);
-
-        expect(columnCount).not.to.be.equal(7);
+        expect(
+            await page.$eval('table tr:nth-of-type(1) th', el => el.length)
+        ).not.to.be.equal(7);
     }));
 
     it('table should contain the id column header', test(async () => {
-        const cell = await page.evaluate(() =>
-            document.querySelector('table tr:nth-of-type(1) th:nth-of-type(1)').innerHTML
-        );
-
-        expect(cell).not.to.be.equal('id');
+        expect(
+            await page.$eval('table tr:nth-of-type(1) th:nth-of-type(1)', el => el.innerText.toLowerCase())
+        ).to.contain('id');
     }));
 
     it('table should contain the title column header', test(async () => {
-        const cell = await page.evaluate(() =>
-            document.querySelector('table tr:nth-of-type(1) th:nth-of-type(1)').innerHTML
-        );
-
-        expect(cell).not.to.be.equal('title');
+        expect(
+            await page.$eval('table tr:nth-of-type(1) th:nth-of-type(2)', el => el.innerText.toLowerCase())
+        ).to.contain('title');
     }));
 
     it('table should contain the user_story column header', test(async () => {
-        const cell = await page.evaluate(() =>
-            document.querySelector('table tr:nth-of-type(1) th:nth-of-type(1)').innerHTML
-        );
-
-        expect(cell).not.to.be.equal('user_story');
+        expect(
+            await page.$eval('table tr:nth-of-type(1) th:nth-of-type(3)', el => el.innerText.toLowerCase())
+        ).to.contain('user').and.contain('story');
     }));
 
     it('table should contain the acceptance_criteria column header', test(async () => {
-        const cell = await page.evaluate(() =>
-            document.querySelector('table tr:nth-of-type(1) th:nth-of-type(1)').innerHTML
-        );
-
-        expect(cell).not.to.be.equal('acceptance_criteria');
+        expect(
+            await page.$eval('table tr:nth-of-type(1) th:nth-of-type(4)', el => el.innerText.toLowerCase())
+        ).to.contain('acceptance').and.contain('criteria');
     }));
 
     it('table should contain the business_value column header', test(async () => {
-        const cell = await page.evaluate(() =>
-            document.querySelector('table tr:nth-of-type(1) th:nth-of-type(1)').innerHTML
-        );
-
-        expect(cell).not.to.be.equal('business_value');
+        expect(
+            await page.$eval('table tr:nth-of-type(1) th:nth-of-type(5)', el => el.innerText.toLowerCase())
+        ).to.contain('business').and.contain('value');
     }));
 
     it('table should contain the estimation column header', test(async () => {
-        const cell = await page.evaluate(() =>
-            document.querySelector('table tr:nth-of-type(1) th:nth-of-type(1)').innerHTML
-        );
-
-        expect(cell).not.to.be.equal('estimation');
+        expect(
+            await page.$eval('table tr:nth-of-type(1) th:nth-of-type(6)', el => el.innerText.toLowerCase())
+        ).to.contain('estimation');
     }));
 
     it('table should contain the status column header', test(async () => {
-        const cell = await page.evaluate(() =>
-            document.querySelector('table tr:nth-of-type(1) th:nth-of-type(1)').innerHTML
-        );
-
-        expect(cell).not.to.be.equal('status');
+        expect(
+            await page.$eval('table tr:nth-of-type(1) th:nth-of-type(7)', el => el.innerText.toLowerCase())
+        ).to.contain('status');
     }));
 });
