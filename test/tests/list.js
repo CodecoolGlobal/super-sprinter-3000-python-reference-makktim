@@ -2,14 +2,25 @@ const {expect} = require('chai');
 const {test} = require('../browser');
 
 describe('List all User Stories', () => {
-    let page, request;
+    let page, response;
 
     /**
      * Load the page and store it for future tests.
      */
     before(test(async (browser, opts) => {
         page = await browser.newPage();
-        request = await page.goto(`${opts.appUrl}/`);
+        response = await page.goto(`${opts.appUrl}/`);
+    }));
+
+    it('loads the page without Exception', test(async () => {
+        // Check for Flask debug messages
+        expect(await page.$('.traceback')).to.be.null;
+        expect(await page.$('.debugger')).to.be.null;
+    }));
+
+    it('loads the page without Error outside debug mode', test(async () => {
+        expect(await response.ok).to.be.true;
+        expect(await response.text()).not.to.contain('Server Error');
     }));
 
     it('should show a header', test(async () => {
