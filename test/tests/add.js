@@ -199,4 +199,85 @@ describe('Add User Story', () => {
             }));
         });
     });
+
+    describe('Business value input', () => {
+        describe('Label', () => {
+            it('should be visible', test(async () => {
+                expect(
+                    await page.$('label[for="business_value"]')
+                ).not.to.be.null;
+            }));
+
+            it('should have a proper text', test(async () => {
+                expect(
+                    await page.$eval('label[for="business_value"]', el => el.innerHTML.toLowerCase())
+                ).to.contain('business').and.contain('value');
+            }));
+        });
+
+        describe('Input', () => {
+            it('should have a proper name attribute', test(async () => {
+                expect(
+                    await page.$('input[name="business_value"]')
+                ).not.to.be.null;
+            }));
+
+            it('should have a proper id attribute', test(async () => {
+                expect(
+                    await page.$('input#business_value')
+                ).not.to.be.null;
+            }));
+
+            it('should have a proper type attribute', test(async () => {
+                expect(
+                    await page.$eval('#business_value', el => el.getAttribute('type'))
+                ).to.be.equal('number');
+            }));
+
+            it('should have a min attribute specified', test(async () => {
+                expect(
+                    await page.$eval('#business_value', el => el.getAttribute('min'))
+                ).not.to.be.null;
+            }));
+
+            it('should have a correct min attribute specified', test(async () => {
+                expect(
+                    await page.$eval('#business_value', el => el.getAttribute('min'))
+                ).to.be.equal('100');
+            }));
+
+            it('should have a max attribute specified', test(async () => {
+                expect(
+                    await page.$eval('#business_value', el => el.getAttribute('max'))
+                ).not.to.be.null;
+            }));
+
+            it('should have a correct max attribute specified', test(async () => {
+                expect(
+                    await page.$eval('#business_value', el => el.getAttribute('max'))
+                ).to.be.equal('1500');
+            }));
+
+            it('should have a step attribute specified', test(async () => {
+                expect(
+                    await page.$eval('#business_value', el => el.getAttribute('step'))
+                ).not.to.be.null;
+            }));
+
+            it('should have a correct step attribute specified', test(async () => {
+                expect(
+                    await page.$eval('#business_value', el => el.getAttribute('step'))
+                ).to.be.equal('100');
+            }));
+
+            it('should be editable', test(async () => {
+                await page.$eval('#business_value', el => el.value = '');
+                await page.type('#business_value', '200');
+
+                expect(
+                    await page.$eval('#business_value', el => el.value)
+                ).to.be.equal('200');
+            }));
+        });
+    });
 });
