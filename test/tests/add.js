@@ -149,4 +149,54 @@ describe('Add User Story', () => {
             }));
         });
     });
+
+    describe('Acceptance Criteria input', () => {
+        describe('Label', () => {
+            it('should be visible', test(async () => {
+                expect(
+                    await page.$('label[for="acceptance_criteria"]')
+                ).not.to.be.null;
+            }));
+
+            it('should have a proper text', test(async () => {
+                expect(
+                    await page.$eval('label[for="acceptance_criteria"]', el => el.innerHTML.toLowerCase())
+                ).to.contain('acceptance').and.contain('criteria');
+            }));
+        });
+
+        describe('Input', () => {
+            it('should have a proper name attribute', test(async () => {
+                expect(
+                    await page.$('textarea[name="acceptance_criteria"]')
+                ).not.to.be.null;
+            }));
+
+            it('should have a proper id attribute', test(async () => {
+                expect(
+                    await page.$('textarea#acceptance_criteria')
+                ).not.to.be.null;
+            }));
+
+            it('should have a rows attribute specified', test(async () => {
+                expect(
+                    await page.$eval('#acceptance_criteria', el => el.getAttribute('rows'))
+                ).not.to.be.null;
+            }));
+
+            it('should have a cols attribute specified', test(async () => {
+                expect(
+                    await page.$eval('#acceptance_criteria', el => el.getAttribute('cols'))
+                ).not.to.be.null;
+            }));
+
+            it('should be editable', test(async () => {
+                await page.type('#acceptance_criteria', 'Test User Story description');
+
+                expect(
+                    await page.$eval('#acceptance_criteria', el => el.value)
+                ).to.be.equal('Test User Story description');
+            }));
+        });
+    });
 });
