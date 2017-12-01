@@ -280,4 +280,110 @@ describe('Add User Story', () => {
             }));
         });
     });
+
+    describe('Estimation input', () => {
+        describe('Label', () => {
+            it('should be visible', test(async () => {
+                expect(
+                    await page.$('label[for="estimation"]')
+                ).not.to.be.null;
+            }));
+
+            it('should have a proper text', test(async () => {
+                expect(
+                    await page.$eval('label[for="estimation"]', el => el.innerHTML.toLowerCase())
+                ).to.contain('estim');
+            }));
+        });
+
+        describe('Input', () => {
+            it('should have a proper name attribute', test(async () => {
+                expect(
+                    await page.$('input[name="estimation"]')
+                ).not.to.be.null;
+            }));
+
+            it('should have a proper id attribute', test(async () => {
+                expect(
+                    await page.$('input#estimation')
+                ).not.to.be.null;
+            }));
+
+            it('should have a proper type attribute', test(async () => {
+                expect(
+                    await page.$eval('#estimation', el => el.getAttribute('type'))
+                ).to.be.equal('number');
+            }));
+
+            it('should have a min attribute specified', test(async () => {
+                expect(
+                    await page.$eval('#estimation', el => el.getAttribute('min'))
+                ).not.to.be.null;
+            }));
+
+            it('should have a correct min attribute specified', test(async () => {
+                expect(
+                    await page.$eval('#estimation', el => el.getAttribute('min'))
+                ).to.be.equal('0.5');
+            }));
+
+            it('should have a max attribute specified', test(async () => {
+                expect(
+                    await page.$eval('#estimation', el => el.getAttribute('max'))
+                ).not.to.be.null;
+            }));
+
+            it('should have a correct max attribute specified', test(async () => {
+                expect(
+                    await page.$eval('#estimation', el => el.getAttribute('max'))
+                ).to.be.equal('40');
+            }));
+
+            it('should have a step attribute specified', test(async () => {
+                expect(
+                    await page.$eval('#estimation', el => el.getAttribute('step'))
+                ).not.to.be.null;
+            }));
+
+            it('should have a correct step attribute specified', test(async () => {
+                expect(
+                    await page.$eval('#estimation', el => el.getAttribute('step'))
+                ).to.be.equal('0.5');
+            }));
+
+            it('should be editable', test(async () => {
+                await page.$eval('#estimation', el => el.value = '');
+                await page.type('#estimation', '10');
+
+                expect(
+                    await page.$eval('#estimation', el => el.value)
+                ).to.be.equal('10');
+            }));
+        });
+    });
+
+    describe('Submit button', () => {
+        describe('Layout', () => {
+            it('should have a proper tag', test(async () => {
+                expect(
+                    await page.$$('button')
+                ).to.have.lengthOf(1);
+            }));
+
+            it('should have a proper type', test(async () => {
+                expect(
+                    await page.$eval('button', el => el.getAttribute('type'))
+                ).to.be.equal('submit');
+            }));
+
+            it('should have a proper text', test(async () => {
+                expect(
+                    await page.$eval('button', el => el.innerHTML.toLowerCase())
+                ).to.be.equal('add new user story');
+            }));
+        });
+        describe('Functionality', () => {
+
+        });
+    });
 });
