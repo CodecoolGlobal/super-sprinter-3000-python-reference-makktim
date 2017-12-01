@@ -6,15 +6,10 @@ Check if you have Node.js installed with `node --version`
 If you get an error message, or you have older then 7.x version.
 You should install the latest version with the following commands: *(This will take a lot of time...)*
 ```
-echo 'export PATH=$HOME/local/bin:$PATH' >> ~/.bashrc
-. ~/.bashrc
-mkdir ~/local
-mkdir ~/node-latest-install
-cd ~/node-latest-install
-curl http://nodejs.org/dist/node-latest.tar.gz | tar xz --strip-components=1
-./configure --prefix=~/local
-make install # ok, fine, this step takes a lot of time...
-curl https://www.npmjs.org/install.sh | sh
+sudo apt-get update
+sudo apt-get install curl
+curl -sL https://deb.nodesource.com/setup_7.x | sudo -E bash -
+sudo apt-get install nodejs
 ```
 
 Source: https://gist.github.com/isaacs/579814#file-node-and-npm-in-30-seconds-sh
