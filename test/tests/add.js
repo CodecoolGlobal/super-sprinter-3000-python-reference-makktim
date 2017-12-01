@@ -51,7 +51,6 @@ describe('Add User Story', () => {
     });
 
     describe('Story title input', () => {
-
         describe('Label', () => {
             it('should be visible', test(async () => {
                 expect(
@@ -97,6 +96,56 @@ describe('Add User Story', () => {
                 expect(
                     await page.$eval('#title', el => el.value)
                 ).to.be.equal('Test User Story');
+            }));
+        });
+    });
+
+    describe('User Story input', () => {
+        describe('Label', () => {
+            it('should be visible', test(async () => {
+                expect(
+                    await page.$('label[for="user_story"]')
+                ).not.to.be.null;
+            }));
+
+            it('should have a proper text', test(async () => {
+                expect(
+                    await page.$eval('label[for="user_story"]', el => el.innerHTML.toLowerCase())
+                ).to.contain('user').and.contain('story');
+            }));
+        });
+
+        describe('Input', () => {
+            it('should have a proper name attribute', test(async () => {
+                expect(
+                    await page.$('textarea[name="user_story"]')
+                ).not.to.be.null;
+            }));
+
+            it('should have a proper id attribute', test(async () => {
+                expect(
+                    await page.$('textarea#user_story')
+                ).not.to.be.null;
+            }));
+
+            it('should have a rows attribute specified', test(async () => {
+                expect(
+                    await page.$eval('#user_story', el => el.getAttribute('rows'))
+                ).not.to.be.null;
+            }));
+
+            it('should have a cols attribute specified', test(async () => {
+                expect(
+                    await page.$eval('#user_story', el => el.getAttribute('cols'))
+                ).not.to.be.null;
+            }));
+
+            it('should be editable', test(async () => {
+                await page.type('#user_story', 'Test User Story description');
+
+                expect(
+                    await page.$eval('#user_story', el => el.value)
+                ).to.be.equal('Test User Story description');
             }));
         });
     });
