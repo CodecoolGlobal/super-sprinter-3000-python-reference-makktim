@@ -453,6 +453,13 @@ It should be saved`)
                 ).to.be.equal('7.5h')
             }));
 
+
+            it('should show the first story\'s estimation in the list page', test(async () => {
+                expect(
+                    await page.$eval('table tr:nth-of-type(5) td:nth-of-type(7)', el => el.innerText.toLowerCase())
+                ).to.contain('planning')
+            }));
+
             /**
              * The newly generated story should get the next positive number as an id.
              */

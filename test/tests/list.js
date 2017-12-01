@@ -30,7 +30,7 @@ describe('List all User Stories', () => {
             ).to.be.equal('Super Sprinter 3000');
         }));
     });
-    describe('Table', () => {
+    describe('Table layout', () => {
         it('should be visible', test(async () => {
             expect(
                 await page.$('table')
@@ -90,5 +90,55 @@ describe('List all User Stories', () => {
                 await page.$eval('table tr:nth-of-type(1) th:nth-of-type(7)', el => el.innerText.toLowerCase())
             ).to.contain('status');
         }));
+    });
+    describe('Table content', () => {
+            it('should show the first story\'s generated id in the list page', test(async () => {
+                //await page.waitForNavigation({timeout: 0});
+
+                expect(
+                    await page.$eval('table tr:nth-of-type(2) td:nth-of-type(1)', el => el.innerText)
+                ).to.be.equal('1')
+            }));
+
+            it('should show the first story\'s title in the list page', test(async () => {
+                expect(
+                    await page.$eval('table tr:nth-of-type(2) td:nth-of-type(2)', el => el.innerText)
+                ).to.be.equal('List all User Stories')
+            }));
+
+            it('should show the first story\'s user story in the list page', test(async () => {
+                expect(
+                    await page.$eval('table tr:nth-of-type(2) td:nth-of-type(3)', el => el.innerText)
+                ).to.be.equal(`As a User,
+I want to see all the previously saved User stories,
+So I get an overview of all requirements
+`)
+            }));
+
+            it('should show the first story\'s acceptance criteria in the list page', test(async () => {
+                expect(
+                    await page.$eval('table tr:nth-of-type(2) td:nth-of-type(4)', el => el.innerText)
+                ).to.be.equal(`Given that there are any number ({0..n}) of saved User Stories,
+When I open the website (\`/\`),
+Then ensure I see a table with all the stored data`)
+            }));
+
+            it('should show the first story\'s business value in the list page', test(async () => {
+                expect(
+                    await page.$eval('table tr:nth-of-type(2) td:nth-of-type(5)', el => el.innerText)
+                ).to.contain('1000').and.contain('point')
+            }));
+
+            it('should show the first story\'s estimation in the list page', test(async () => {
+                expect(
+                    await page.$eval('table tr:nth-of-type(2) td:nth-of-type(6)', el => el.innerText)
+                ).to.contain('2').and.contain('h')
+            }));
+
+            it('should show the first story\'s estimation in the list page', test(async () => {
+                expect(
+                    await page.$eval('table tr:nth-of-type(2) td:nth-of-type(7)', el => el.innerText.toLowerCase())
+                ).to.contain('in').and.contain('progress')
+            }));
     });
 });
