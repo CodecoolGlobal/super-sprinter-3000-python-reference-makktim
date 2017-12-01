@@ -3,6 +3,29 @@ const {test} = require('../browser');
 
 let page, response;
 
+const fillForm = (async (page) => {
+    await page.$eval('#title', el => el.value = '');
+    await page.type('#title', 'Another User Story');
+
+    await page.$eval('#user_story', el => el.value = '');
+    await page.type('#user_story', `As a User Story,
+I would like to be saved in the database
+So users can see me`);
+
+    await page.$eval('#acceptance_criteria', el => el.value = '');
+    await page.type('#acceptance_criteria', `When I write things here
+It should be saved`);
+
+    await page.$eval('#business_value', el => el.value = '');
+    await page.type('#business_value', '1400');
+
+    await page.$eval('#estimation', el => el.value = '');
+    await page.type('#estimation', '7.5');
+
+    await page.click('button[type="submit"]');
+    await page.waitForNavigation();
+});
+
 /**
  * Load the page and store it for future tests.
  */
@@ -383,7 +406,63 @@ describe('Add User Story', () => {
             }));
         });
         describe('Functionality', () => {
+            /*before(test(async (browser, opts) => {
+                response = await page.goto(`${opts.appUrl}/story`);
 
+            }));*/
+
+            it('should redirect to list page on submit', test(async (browser, opts) => {
+                await fillForm(page);
+                await page.waitForNavigation({timeout: 0});
+
+                expect(
+                    await page.url()
+                ).to.be.equal(`${opts.appUrl}/`);
+            }));
+
+            it('should show the new data\'s title in the list page', test(async () => {
+                expect(
+                    await page.$eval('table tr:nth-of-type(5) td:nth-of-type(2)', el => el.innerText)
+                ).to.be.equal('Another User Story')
+            }));
+
+            it('should show the new data\'s user story in the list page', test(async () => {
+                expect(
+                    await page.$eval('table tr:nth-of-type(5) td:nth-of-type(3)', el => el.innerText)
+                ).to.be.equal(`As a User Story,
+I would like to be saved in the database
+So users can see me`)
+            }));
+
+            it('should show the new data\'s acceptance criteria in the list page', test(async () => {
+                expect(
+                    await page.$eval('table tr:nth-of-type(5) td:nth-of-type(4)', el => el.innerText)
+                ).to.be.equal(`When I write things here
+It should be saved`)
+            }));
+
+            it('should show the new data\'s business value in the list page', test(async () => {
+                expect(
+                    await page.$eval('table tr:nth-of-type(5) td:nth-of-type(5)', el => el.innerText)
+                ).to.be.equal('1400 point')
+            }));
+
+            it('should show the new data\'s estimation in the list page', test(async () => {
+                expect(
+                    await page.$eval('table tr:nth-of-type(5) td:nth-of-type(6)', el => el.innerText)
+                ).to.be.equal('7.5h')
+            }));
+
+            /**
+             * The newly generated story should get the next positive number as an id.
+             */
+            it('should show the new data\'s generated id in the list page', test(async () => {
+                //await page.waitForNavigation({timeout: 0});
+
+                expect(
+                    await page.$eval('table tr:nth-of-type(5) td:nth-of-type(1)', el => el.innerText)
+                ).to.be.equal('4')
+            }));
         });
     });
 });
