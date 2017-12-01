@@ -3,38 +3,15 @@ const {test} = require('../browser');
 
 let page, response;
 
-const fillForm = (async (page) => {
-    await page.$eval('#title', el => el.value = '');
-    await page.type('#title', 'Another User Story');
-
-    await page.$eval('#user_story', el => el.value = '');
-    await page.type('#user_story', `As a User Story,
-I would like to be saved in the database
-So users can see me`);
-
-    await page.$eval('#acceptance_criteria', el => el.value = '');
-    await page.type('#acceptance_criteria', `When I write things here
-It should be saved`);
-
-    await page.$eval('#business_value', el => el.value = '');
-    await page.type('#business_value', '1400');
-
-    await page.$eval('#estimation', el => el.value = '');
-    await page.type('#estimation', '7.5');
-
-    await page.click('button[type="submit"]');
-    await page.waitForNavigation();
-});
-
 /**
  * Load the page and store it for future tests.
  */
 before(test(async (browser, opts) => {
     page = await browser.newPage();
-    response = await page.goto(`${opts.appUrl}/story`);
+    response = await page.goto(`${opts.appUrl}/story/1`);
 }));
 
-describe('Add User Story', () => {
+describe('Update existing User Story', () => {
     describe('Page', () => {
         it('should load without Exception', test(async () => {
             // Check for Flask debug messages
@@ -50,7 +27,7 @@ describe('Add User Story', () => {
         it('should show a header', test(async () => {
             expect(
                 await page.$eval('h1', el => el.innerText)
-            ).to.be.equal('Add User Story');
+            ).to.be.equal('Update User Story');
         }));
 
         it('should contain a form', test(async () => {
@@ -113,12 +90,10 @@ describe('Add User Story', () => {
                 ).to.be.equal('5');
             }));
 
-            it('should be editable', test(async () => {
-                await page.type('#title', 'Test User Story');
-
+            it('should contain the stored data', test(async () => {
                 expect(
                     await page.$eval('#title', el => el.value)
-                ).to.be.equal('Test User Story');
+                ).to.be.equal('List all User Stories');
             }));
         });
     });
@@ -164,11 +139,12 @@ describe('Add User Story', () => {
             }));
 
             it('should be editable', test(async () => {
-                await page.type('#user_story', 'Test User Story description');
-
                 expect(
                     await page.$eval('#user_story', el => el.value)
-                ).to.be.equal('Test User Story description');
+                ).to.be.equal(`As a User,
+I want to see all the previously saved User stories,
+So I get an overview of all requirements
+`);
             }));
         });
     });
@@ -214,11 +190,11 @@ describe('Add User Story', () => {
             }));
 
             it('should be editable', test(async () => {
-                await page.type('#acceptance_criteria', 'Test User Story description');
-
                 expect(
                     await page.$eval('#acceptance_criteria', el => el.value)
-                ).to.be.equal('Test User Story description');
+                ).to.be.equal(`Given that there are any number ({0..n}) of saved User Stories,
+When I open the website (\`/\`),
+Then ensure I see a table with all the stored data`);
             }));
         });
     });
@@ -385,6 +361,42 @@ describe('Add User Story', () => {
         });
     });
 
+    describe('Status select', () => {
+        describe('Label', () => {
+            it('should be visible', test(async () => {
+                expect(
+                    await page.$('label[for="status"]')
+                ).not.to.be.null;
+            }));
+
+            it('should have a proper text', test(async () => {
+                expect(
+                    await page.$eval('label[for="status"]', el => el.innerHTML.toLowerCase())
+                ).to.contain('status');
+            }));
+        });
+
+        describe('Select', () => {
+            it('should have a proper name attribute', test(async () => {
+                expect(
+                    await page.$('select[name="status"]')
+                ).not.to.be.null;
+            }));
+
+            it('should have a proper id attribute', test(async () => {
+                expect(
+                    await page.$('select#status')
+                ).not.to.be.null;
+            }));
+
+            it('should keep the saved value', test(async () => {
+                expect(
+                    await page.$eval('#status', el => el.value.toLowerCase())
+                ).to.be.equal('in progress');
+            }));
+        });
+    });
+
     describe('Submit button', () => {
         describe('Layout', () => {
             it('should have a proper tag', test(async () => {
@@ -402,67 +414,32 @@ describe('Add User Story', () => {
             it('should have a proper text', test(async () => {
                 expect(
                     await page.$eval('button', el => el.innerHTML.toLowerCase())
-                ).to.be.equal('add new user story');
+                ).to.be.equal('update user story');
             }));
         });
         describe('Functionality', () => {
             it('should redirect to list page on submit', test(async (browser, opts) => {
-                await fillForm(page);
+                await page.$eval('#title', el => el.value = '');
+                await page.type('#title', 'List every User Stories');
+
+                await page.click('button[type="submit"]');
+                await page.waitForNavigation();
 
                 expect(
                     await page.url()
                 ).to.be.equal(`${opts.appUrl}/`);
             }));
 
-            it('should show the new data\'s title in the list page', test(async () => {
+            it('should be possible to change the title', test(async () => {
                 expect(
-                    await page.$eval('table tr:nth-of-type(5) td:nth-of-type(2)', el => el.innerText)
-                ).to.be.equal('Another User Story')
+                    await page.$eval('table tr:nth-of-type(2) td:nth-of-type(2)', el => el.innerText)
+                ).to.be.equal('List every User Stories')
             }));
 
-            it('should show the new data\'s user story in the list page', test(async () => {
+            it('should not create a duplicate', test(async () => {
                 expect(
-                    await page.$eval('table tr:nth-of-type(5) td:nth-of-type(3)', el => el.innerText)
-                ).to.be.equal(`As a User Story,
-I would like to be saved in the database
-So users can see me`)
-            }));
-
-            it('should show the new data\'s acceptance criteria in the list page', test(async () => {
-                expect(
-                    await page.$eval('table tr:nth-of-type(5) td:nth-of-type(4)', el => el.innerText)
-                ).to.be.equal(`When I write things here
-It should be saved`)
-            }));
-
-            it('should show the new data\'s business value in the list page', test(async () => {
-                expect(
-                    await page.$eval('table tr:nth-of-type(5) td:nth-of-type(5)', el => el.innerText)
-                ).to.be.equal('1400 point')
-            }));
-
-            it('should show the new data\'s estimation in the list page', test(async () => {
-                expect(
-                    await page.$eval('table tr:nth-of-type(5) td:nth-of-type(6)', el => el.innerText)
-                ).to.be.equal('7.5h')
-            }));
-
-
-            it('should show the first story\'s estimation in the list page', test(async () => {
-                expect(
-                    await page.$eval('table tr:nth-of-type(5) td:nth-of-type(7)', el => el.innerText.toLowerCase())
-                ).to.contain('planning')
-            }));
-
-            /**
-             * The newly generated story should get the next positive number as an id.
-             */
-            it('should show the new data\'s generated id in the list page', test(async () => {
-                //await page.waitForNavigation({timeout: 0});
-
-                expect(
-                    await page.$eval('table tr:nth-of-type(5) td:nth-of-type(1)', el => el.innerText)
-                ).to.be.equal('4')
+                    await page.$eval('table', el => el.innerHTML)
+                ).to.not.contain('List all User Stories')
             }));
         });
     });
