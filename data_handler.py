@@ -4,20 +4,32 @@ import os
 DATA_FILE_PATH = os.getenv('DATA_FILE_PATH') if 'DATA_FILE_PATH' in os.environ else 'data.csv'
 DATA_HEADER = ['id', 'title', 'user_story', 'acceptance_criteria', 'business_value', 'estimation', 'status']
 STATUSES = ['planning', 'todo', 'in progress', 'review', 'done']
+DEFAULT_STATUS = STATUSES[0]
 
 
-def get_all_user_story():
-    return get_csv_data()
+def get_all_user_story(convert_linebreaks=False):
+    all_stories = get_csv_data()
+
+    if convert_linebreaks:
+        for user_story in all_stories:
+            #  allow multiline strings to display in HTML
+            user_story['user_story'] = convert_linebreaks_to_br(user_story['user_story'])
+            user_story['acceptance_criteria'] = convert_linebreaks_to_br(user_story['acceptance_criteria'])
+
+    return all_stories
 
 
 def get_user_story(story_id):
-    user_story = get_csv_data(story_id)
+    return get_csv_data(story_id)
 
-    # change input new line to the correct HTML code to display it in the edit textarea
-    user_story['user_story'] = user_story['user_story'].replace('<br>', '&#10;')
-    user_story['acceptance_criteria'] = user_story['acceptance_criteria'].replace('<br>', '&#10;')
 
-    return user_story
+def get_next_id():
+    existing_data = get_all_user_story()
+
+    if len(existing_data) == 0:
+        return '1'
+
+    return str(int(existing_data[-1]['id']) + 1)
 
 
 def get_csv_data(one_user_story_id=None):
@@ -40,10 +52,6 @@ def get_csv_data(one_user_story_id=None):
             #  make a copy of the read row, since we can't modify it
             user_story = dict(row)
 
-            #  allow multiline strings to display in HTML
-            user_story['user_story'] = user_story['user_story']
-            user_story['acceptance_criteria'] = user_story['acceptance_criteria']
-
             # if filtered, then just return this _found_ user story
             if one_user_story_id is not None and one_user_story_id == user_story['id']:
                 return user_story
@@ -56,29 +64,25 @@ def get_csv_data(one_user_story_id=None):
 
 
 def add_user_story(story):
-    existing_data = get_all_user_story()
+    # set id and default status
+    story['id'] = get_next_id()
+    story['status'] = DEFAULT_STATUS
 
-    # set default status
-    story['status'] = STATUSES[0]
-
-    if len(existing_data) > 0:
-        story['id'] = int(existing_data[-1]['id']) + 1
-    else:
-        story['id'] = 0
-
-    add_user_story_to_file(existing_data, story, True)
+    add_user_story_to_file(story, True)
 
 
 def update_user_story(story):
+    add_user_story_to_file(story, False)
+
+
+def add_user_story_to_file(story, append=True):
+    """
+    Save a new or update an existing user story in the csv file.
+    :param story: The user story we'd like to save
+    :param append: Is this a new story that should be appended to the end of the file?
+    :return: -
+    """
     existing_data = get_all_user_story()
-
-    add_user_story_to_file(existing_data, story, False)
-
-
-def add_user_story_to_file(existing_data, story, append=True):
-    # change input new line to the correct HTML tag
-    story['user_story'] = story['user_story'].replace('\r\n', '<br>')
-    story['acceptance_criteria'] = story['acceptance_criteria'].replace('\r\n', '<br>')
 
     with open(DATA_FILE_PATH, 'w', newline='', encoding='utf-8') as csvfile:
         writer = csv.DictWriter(csvfile, fieldnames=DATA_HEADER)
@@ -94,3 +98,7 @@ def add_user_story_to_file(existing_data, story, append=True):
 
         if append:
             writer.writerow(story)
+
+
+def convert_linebreaks_to_br(original_str):
+    return '<br>'.join(original_str.split('\n'))
